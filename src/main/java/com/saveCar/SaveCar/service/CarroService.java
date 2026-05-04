@@ -4,21 +4,28 @@ import com.saveCar.SaveCar.entity.Carro;
 import com.saveCar.SaveCar.entity.dto.CreateCarroDTO;
 import com.saveCar.SaveCar.entity.dto.CarroUpdateDTO;
 import com.saveCar.SaveCar.repository.CarroRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CarroService {
 
     private CarroRepository carroRepository;
 
+    public CarroService(CarroRepository carroRepository) {
+        this.carroRepository = carroRepository;
+    }
+
     public List<Carro> buscarTodos() {
         return carroRepository.findAll();
     }
 
     public Carro buscarPorId(Long id) {
-        return carroRepository.findById(id).orElseThrow(() -> new RuntimeException("Carro não encontrado!"));
+        Optional<Carro> carro = carroRepository.findById(id);
+        return carro.orElse(null);
     }
 
     //Passando CreateCarroDTO nos parametros pois a funcao precisa receber os novos dados para poder criar um novo Carro
@@ -35,7 +42,7 @@ public class CarroService {
 
     public Carro editarCarro(Long id, CarroUpdateDTO carroAtualizado) {
         Carro carro = carroRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Carro não existe!"));
+                .orElseThrow(() -> new RuntimeException("ID: " + id + " não encontrado, carro não existe"));
 
         //Atualizado dados do carro ja existente com o novo carro
         carro.setMarca(carroAtualizado.getMarca());
@@ -46,10 +53,11 @@ public class CarroService {
         return carroRepository.save(carro);
     }
 
-    public void excluirCarro(Long id) {
+    public ResponseEntity<String> excluirCarro(Long id) {
         Carro carro = carroRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Carro não encontrado!"));
+                .orElseThrow(() -> new RuntimeException("ID: " + id + " não encontrado, carro não existe"));
         carroRepository.delete(carro);
+        return ResponseEntity.status(200).body("ID: " + id + " Excluido com sucesso!");
     }
 
 }
