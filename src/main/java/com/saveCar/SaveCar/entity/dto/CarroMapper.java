@@ -32,7 +32,7 @@ public class CarroMapper {
         carro.setMarca(dto.getMarca());
         carro.setModelo(dto.getModelo());
         carro.setAno(dto.getAno());
-        carro.setNovo(dto.isNovo());
+        carro.setNovo(dto.getNovo());
         return carro;
     }
 

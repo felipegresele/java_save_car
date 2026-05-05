@@ -9,14 +9,14 @@ public class UpdateCarroDTO {
 
     private String marca;
     private String modelo;
-    private int ano;
-    private boolean novo;
+    private Integer ano;
+    private Boolean novo;
 
     UpdateCarroDTO() {
 
     }
 
-    UpdateCarroDTO(String marca, String modelo, int ano, boolean novo) {
+    UpdateCarroDTO(String marca, String modelo, Integer ano, Boolean novo) {
         this.marca = marca;
         this.modelo = modelo;
         this.ano = ano;

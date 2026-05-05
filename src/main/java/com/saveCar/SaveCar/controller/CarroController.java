@@ -28,8 +28,9 @@ public class CarroController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Carro>> buscarPorId(@PathVariable Long id){
-        return service.buscarPorId(id);
+    public ResponseEntity<Carro> buscarPorId(@PathVariable Long id){
+        Carro carro = service.buscarPorId(id);
+        return ResponseEntity.ok().body(carro);
     }
 
     @PostMapping
@@ -47,7 +48,8 @@ public class CarroController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
-        return service.excluirCarro(id);
+        service.excluirCarro(id);
+        return ResponseEntity.ok("Carro excluido com sucesso, ID: " + id);
     }
 
 }
