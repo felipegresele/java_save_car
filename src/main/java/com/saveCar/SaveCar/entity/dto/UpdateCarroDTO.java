@@ -5,18 +5,18 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CarroUpdateDTO {
+public class UpdateCarroDTO {
 
     private String marca;
     private String modelo;
     private int ano;
     private boolean novo;
 
-    CarroUpdateDTO() {
+    UpdateCarroDTO() {
 
     }
 
-    CarroUpdateDTO(String marca, String modelo, int ano, boolean novo) {
+    UpdateCarroDTO(String marca, String modelo, int ano, boolean novo) {
         this.marca = marca;
         this.modelo = modelo;
         this.ano = ano;

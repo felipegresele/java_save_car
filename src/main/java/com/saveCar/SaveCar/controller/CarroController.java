@@ -1,13 +1,15 @@
 package com.saveCar.SaveCar.controller;
 
 import com.saveCar.SaveCar.entity.Carro;
-import com.saveCar.SaveCar.entity.dto.CarroUpdateDTO;
-import com.saveCar.SaveCar.entity.dto.CreateCarroDTO;
+import com.saveCar.SaveCar.entity.dto.UpdateCarroDTO;
+import com.saveCar.SaveCar.entity.dto.ResponseCarroDTO;
 import com.saveCar.SaveCar.service.CarroService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/carros")
@@ -25,14 +27,19 @@ public class CarroController {
         return ResponseEntity.ok().body(carros);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<Carro>> buscarPorId(@PathVariable Long id){
+        return service.buscarPorId(id);
+    }
+
     @PostMapping
-    public ResponseEntity<Carro> save(@RequestBody CreateCarroDTO dto) {
+    public ResponseEntity<Carro> save(@RequestBody ResponseCarroDTO dto) {
         Carro carro = service.salvarCarro(dto);
             return ResponseEntity.status(201).body(carro);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Carro> update(@RequestBody CarroUpdateDTO dto,
+    public ResponseEntity<Carro> update(@RequestBody UpdateCarroDTO dto,
                                         @PathVariable Long id) {
         Carro carroAtualizado = service.editarCarro(id, dto);
         return ResponseEntity.status(200).body(carroAtualizado);
