@@ -7,8 +7,8 @@ import com.saveCar.SaveCar.entity.dto.UpdateCarroDTO;
 import com.saveCar.SaveCar.infra.CarNotFoundException;
 import com.saveCar.SaveCar.infra.InvalidCarDataException;
 import com.saveCar.SaveCar.repository.CarroRepository;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,8 +25,8 @@ public class CarroService {
         this.carroMapper = carroMapper;
     }
 
-    public List<Carro> buscarTodos() {
-        return carroRepository.findAll();
+    public Page<Carro> buscarTodos(Pageable pageable) {
+        return carroRepository.findAll(pageable);
     }
 
     public Carro buscarPorId(Long id) {

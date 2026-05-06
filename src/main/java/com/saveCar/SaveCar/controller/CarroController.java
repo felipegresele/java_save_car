@@ -4,6 +4,10 @@ import com.saveCar.SaveCar.entity.Carro;
 import com.saveCar.SaveCar.entity.dto.UpdateCarroDTO;
 import com.saveCar.SaveCar.entity.dto.ResponseCarroDTO;
 import com.saveCar.SaveCar.service.CarroService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,9 +26,16 @@ public class CarroController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Carro>> getAll() {
-        List<Carro> carros = service.buscarTodos();
-        return ResponseEntity.ok().body(carros);
+    public ResponseEntity<Page<Carro>> getAll(Pageable pageable) {
+        //Qual a pagina = page
+        //Qual o tamanho de cada pagina = size
+        //Qual a ordem e pelo o que vai ordenar = order
+
+        //Dessa forma o back controla
+        //pageable = PageRequest.of(0,10, Sort.by("ano").descending());
+
+        //Se não passar isso quem controla a ordenação é o front
+        return ResponseEntity.ok(service.buscarTodos(pageable));
     }
 
     @GetMapping("/{id}")
