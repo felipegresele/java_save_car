@@ -1,18 +1,16 @@
 package com.saveCar.SaveCar.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Builder;
 
 @Entity
+@Table(name = "carro")
 //@Getter
 //@Setter
 //@NoArgsConstructor
 //@AllArgsConstructor
-@Table(name = "carro")
-public class Carro {
+@Builder()
+public class CarroEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,15 +21,20 @@ public class Carro {
     private int ano;
     private boolean novo;
 
-    public Carro() {
+    public CarroEntity() {
 
     }
 
-    public Carro(String marca, String modelo, int ano, boolean novo) {
+    public CarroEntity(Long id, String marca, String modelo, int ano, boolean novo) {
+        this.id = id;
         this.marca = marca;
         this.modelo = modelo;
         this.ano = ano;
         this.novo = novo;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getMarca() {

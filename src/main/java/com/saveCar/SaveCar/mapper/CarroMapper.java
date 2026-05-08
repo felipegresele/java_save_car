@@ -1,13 +1,16 @@
-package com.saveCar.SaveCar.entity.dto;
+package com.saveCar.SaveCar.mapper;
 
-import com.saveCar.SaveCar.entity.Carro;
+import com.saveCar.SaveCar.dto.carro.ResponseCarroDTO;
+import com.saveCar.SaveCar.dto.carro.UpdateCarroDTO;
+import com.saveCar.SaveCar.entity.CarroEntity;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CarroMapper {
 
-    public Carro toEntity(ResponseCarroDTO carroDTO) {
-        Carro carro = new Carro();
+    public CarroEntity toEntity(ResponseCarroDTO carroDTO) {
+        CarroEntity carro = new CarroEntity();
+        carro.getId();
         carro.setMarca(carroDTO.marca());
         carro.setModelo(carroDTO.modelo());
         carro.setAno(carroDTO.ano());
@@ -18,9 +21,10 @@ public class CarroMapper {
 
     //Metodo responsavel por retornar dados pelo DTO
     //Pode ser usado para retornar dados nas APIs
-    public ResponseCarroDTO toDTO(Carro carro) {
+    public ResponseCarroDTO toDTO(CarroEntity carro) {
         //Passando atributos direto no construtor e ja retornando
         return new ResponseCarroDTO(
+                carro.getId(),
                 carro.getMarca(),
                 carro.getModelo(),
                 carro.getAno(),
@@ -28,7 +32,7 @@ public class CarroMapper {
         );
     }
 
-    public Carro update(UpdateCarroDTO dto, Carro carro) {
+    public CarroEntity update(UpdateCarroDTO dto, CarroEntity carro) {
         carro.setMarca(dto.getMarca());
         carro.setModelo(dto.getModelo());
         carro.setAno(dto.getAno());

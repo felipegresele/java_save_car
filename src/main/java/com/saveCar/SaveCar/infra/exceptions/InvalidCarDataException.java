@@ -1,4 +1,4 @@
-package com.saveCar.SaveCar.infra;
+package com.saveCar.SaveCar.infra.exceptions;
 
 public class InvalidCarDataException extends RuntimeException{
 

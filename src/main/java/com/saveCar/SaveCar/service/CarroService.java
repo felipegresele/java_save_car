@@ -1,18 +1,15 @@
 package com.saveCar.SaveCar.service;
 
-import com.saveCar.SaveCar.entity.Carro;
-import com.saveCar.SaveCar.entity.dto.CarroMapper;
-import com.saveCar.SaveCar.entity.dto.ResponseCarroDTO;
-import com.saveCar.SaveCar.entity.dto.UpdateCarroDTO;
-import com.saveCar.SaveCar.infra.CarNotFoundException;
-import com.saveCar.SaveCar.infra.InvalidCarDataException;
+import com.saveCar.SaveCar.entity.CarroEntity;
+import com.saveCar.SaveCar.mapper.CarroMapper;
+import com.saveCar.SaveCar.dto.carro.ResponseCarroDTO;
+import com.saveCar.SaveCar.dto.carro.UpdateCarroDTO;
+import com.saveCar.SaveCar.infra.exceptions.CarNotFoundException;
+import com.saveCar.SaveCar.infra.exceptions.InvalidCarDataException;
 import com.saveCar.SaveCar.repository.CarroRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CarroService {
@@ -25,16 +22,16 @@ public class CarroService {
         this.carroMapper = carroMapper;
     }
 
-    public Page<Carro> buscarTodos(Pageable pageable) {
+    public Page<CarroEntity> buscarTodos(Pageable pageable) {
         return carroRepository.findAll(pageable);
     }
 
-    public Carro buscarPorId(Long id) {
+    public CarroEntity buscarPorId(Long id) {
         return carroRepository.findById(id).orElseThrow(() -> new CarNotFoundException("ID: " + id + " não encontrado, carro não existe"));
     }
 
     //Passando CreateCarroDTO nos parametros pois a funcao precisa receber os novos dados para poder criar um novo Carro
-    public Carro salvarCarro(ResponseCarroDTO dto) {
+    public CarroEntity salvarCarro(ResponseCarroDTO dto) {
         if (dto.marca() == null || dto.marca().isBlank()
                 || dto.modelo() == null || dto.modelo().isBlank()
                 || dto.ano() == null || dto.ano() <= 1960
@@ -44,12 +41,12 @@ public class CarroService {
         }
 
         //Cria se os dados estiverem valídos
-        Carro carro = carroMapper.toEntity(dto);
+        CarroEntity carro = carroMapper.toEntity(dto);
         return carroRepository.save(carro);
     }
 
-    public Carro editarCarro(Long id, UpdateCarroDTO carroAtualizado) {
-        Carro carro = carroRepository.findById(id)
+    public CarroEntity editarCarro(Long id, UpdateCarroDTO carroAtualizado) {
+        CarroEntity carro = carroRepository.findById(id)
                 .orElseThrow(() -> new CarNotFoundException("ID: " + id + " não encontrado, carro não existe"));
 
         if (carroAtualizado.getModelo() == null || carroAtualizado.getModelo().isBlank()
@@ -67,7 +64,7 @@ public class CarroService {
     }
 
     public void excluirCarro(Long id) {
-        Carro carro = carroRepository.findById(id)
+        CarroEntity carro = carroRepository.findById(id)
                 .orElseThrow(() -> new CarNotFoundException("ID: " + id + " não encontrado, carro não existe"));
         carroRepository.delete(carro);
     }

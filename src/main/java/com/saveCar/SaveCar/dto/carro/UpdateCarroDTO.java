@@ -1,4 +1,4 @@
-package com.saveCar.SaveCar.entity.dto;
+package com.saveCar.SaveCar.dto.carro;
 
 import lombok.Getter;
 import lombok.Setter;
