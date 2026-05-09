@@ -1,22 +1,34 @@
 package com.saveCar.SaveCar.mapper;
 
+import com.saveCar.SaveCar.dto.carro.CreateCarroDTO;
 import com.saveCar.SaveCar.dto.carro.ResponseCarroDTO;
 import com.saveCar.SaveCar.dto.carro.UpdateCarroDTO;
 import com.saveCar.SaveCar.entity.CarroEntity;
+import org.apache.coyote.Response;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class CarroMapper {
 
-    public CarroEntity toEntity(ResponseCarroDTO carroDTO) {
-        CarroEntity carro = new CarroEntity();
-        carro.getId();
-        carro.setMarca(carroDTO.marca());
-        carro.setModelo(carroDTO.modelo());
-        carro.setAno(carroDTO.ano());
-        carro.setNovo(carroDTO.novo());
+    public CarroEntity toCreate(CreateCarroDTO dto) {
+        return CarroEntity.builder()
+                .marca(dto.marca())
+                .modelo(dto.modelo())
+                .ano(dto.ano())
+                .novo(dto.novo())
+                .build();
+    }
 
-        return carro;
+    public CarroEntity update(UpdateCarroDTO carroDTO) {
+        return CarroEntity.builder()
+                .marca(carroDTO.getMarca())
+                .modelo(carroDTO.getModelo())
+                .ano(carroDTO.getAno())
+                .novo(carroDTO.getNovo())
+                .build();
     }
 
     //Metodo responsavel por retornar dados pelo DTO
@@ -32,12 +44,10 @@ public class CarroMapper {
         );
     }
 
-    public CarroEntity update(UpdateCarroDTO dto, CarroEntity carro) {
-        carro.setMarca(dto.getMarca());
-        carro.setModelo(dto.getModelo());
-        carro.setAno(dto.getAno());
-        carro.setNovo(dto.getNovo());
-        return carro;
+    public List<ResponseCarroDTO> toDTOs(List<CarroEntity> carros) {
+        return carros.stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
     }
 
 }

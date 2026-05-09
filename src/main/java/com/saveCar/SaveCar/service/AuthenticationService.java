@@ -8,6 +8,7 @@ import com.saveCar.SaveCar.entity.UsuarioEntity;
 import com.saveCar.SaveCar.enums.RoleType;
 import com.saveCar.SaveCar.infra.exceptions.BadRequestException;
 import com.saveCar.SaveCar.infra.security.TokenProvider;
+import com.saveCar.SaveCar.mapper.UsuarioMapper;
 import com.saveCar.SaveCar.repository.RoleRepository;
 import com.saveCar.SaveCar.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,21 +29,28 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final TokenProvider tokenProvider;
+    private final UsuarioMapper usuarioMapper;
     @Value("${jwt.expiration}")
     private long expirationTime;
 
-    public AuthenticationService(UsuarioRepository usuarioRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, TokenProvider tokenProvider) {
+    public AuthenticationService(UsuarioRepository usuarioRepository,
+                                 RoleRepository roleRepository,
+                                 PasswordEncoder passwordEncoder,
+                                 AuthenticationManager authenticationManager,
+                                 TokenProvider tokenProvider,
+                                 UsuarioMapper usuarioMapper) {
         this.usuarioRepository = usuarioRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.tokenProvider = tokenProvider;
+        this.usuarioMapper = usuarioMapper;
     }
 
     public void register(RegisterRequestDTO dto) {
-        UsuarioEntity usuario = usuarioRepository.findByEmail(dto.getEmail()).orElse(null);
+        UsuarioEntity usuarioEncontrado = usuarioRepository.findByEmail(dto.getEmail()).orElse(null);
 
-        if (usuario != null) {
+        if (usuarioEncontrado != null) {
             throw new BadRequestException(("Usuário ja cadastrado com este email!"));
         }
 
@@ -51,12 +59,11 @@ public class AuthenticationService {
                 .name(RoleType.OPERADOR.name())
                 .build()));
 
-        usuarioRepository.save(UsuarioEntity.builder()
-                .username(dto.getUsername())
-                .email(dto.getEmail())
-                        .roles(Set.of(role))
-                        .userPassword(passwordEncoder.encode(dto.getPassword()))
-                .build());
+        UsuarioEntity usuario = usuarioMapper.toEntity(dto);
+        usuario.setUserPassword(passwordEncoder.encode(dto.getPassword()));
+
+        usuario.setRoles(Set.of(role));
+        usuarioRepository.save(usuario);
     }
 
     public TokenResponseDTO login(LoginRequestDTO dto) {

@@ -31,22 +31,23 @@ public class UsuarioEntity implements UserDetails {
     private String userPassword;
 
     //Criando coluna de relação com a RoleEntity
-    @ManyToMany(fetch = FetchType.EAGER //Sempre que carrega o usuario vai trazer este campo no response
+    @ManyToMany(fetch = FetchType.EAGER) //Sempre que carrega o usuario vai trazer este campo no response
     @JoinTable(name = "usuarios_roles",
         joinColumns =  @JoinColumn(name = "usuario_id"),
         inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    public Set<RolesEntity> roles = new HashSet<>();
+    private Set<RolesEntity> roles = new HashSet<>();
 
     public UsuarioEntity() {
 
     }
 
-    public UsuarioEntity(Long id, String name, String email, String usePassword) {
+    public UsuarioEntity(Long id, String name, String email, String userPassword, Set<RolesEntity> roles) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.userPassword = userPassword;
+        this.roles = roles;
     }
 
     public Long getId() {
@@ -71,6 +72,14 @@ public class UsuarioEntity implements UserDetails {
 
     public String getUsePassword() {
         return userPassword;
+    }
+
+    public Set<RolesEntity> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<RolesEntity> roles) {
+        this.roles = roles;
     }
 
     public void setUserPassword(String userPassword) {

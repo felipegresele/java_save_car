@@ -2,8 +2,12 @@ package com.saveCar.SaveCar.controller;
 
 import com.saveCar.SaveCar.dto.auth.LoginRequestDTO;
 import com.saveCar.SaveCar.dto.auth.RegisterRequestDTO;
+import com.saveCar.SaveCar.dto.auth.TokenResponseDTO;
 import com.saveCar.SaveCar.service.AuthenticationService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,8 +29,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public void login(@RequestBody LoginRequestDTO dto) {
-        authenticationService.login(dto);
+    public ResponseEntity<TokenResponseDTO> login(@RequestBody LoginRequestDTO dto) {
+        return ResponseEntity.ok(authenticationService.login(dto));
     }
 
 }

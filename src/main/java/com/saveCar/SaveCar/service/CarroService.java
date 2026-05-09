@@ -1,5 +1,6 @@
 package com.saveCar.SaveCar.service;
 
+import com.saveCar.SaveCar.dto.carro.CreateCarroDTO;
 import com.saveCar.SaveCar.entity.CarroEntity;
 import com.saveCar.SaveCar.mapper.CarroMapper;
 import com.saveCar.SaveCar.dto.carro.ResponseCarroDTO;
@@ -31,7 +32,7 @@ public class CarroService {
     }
 
     //Passando CreateCarroDTO nos parametros pois a funcao precisa receber os novos dados para poder criar um novo Carro
-    public CarroEntity salvarCarro(ResponseCarroDTO dto) {
+    public CarroEntity salvarCarro(CreateCarroDTO dto) {
         if (dto.marca() == null || dto.marca().isBlank()
                 || dto.modelo() == null || dto.modelo().isBlank()
                 || dto.ano() == null || dto.ano() <= 1960
@@ -41,7 +42,7 @@ public class CarroService {
         }
 
         //Cria se os dados estiverem valídos
-        CarroEntity carro = carroMapper.toEntity(dto);
+        CarroEntity carro = carroMapper.toCreate(dto);
         return carroRepository.save(carro);
     }
 
@@ -58,7 +59,7 @@ public class CarroService {
         }
 
         //Só cria depois de validar todos os atributos
-        carroMapper.update(carroAtualizado, carro);
+        carroMapper.update(carroAtualizado);
 
         return carroRepository.save(carro);
     }

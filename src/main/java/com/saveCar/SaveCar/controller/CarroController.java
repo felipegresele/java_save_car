@@ -1,5 +1,6 @@
 package com.saveCar.SaveCar.controller;
 
+import com.saveCar.SaveCar.dto.carro.CreateCarroDTO;
 import com.saveCar.SaveCar.entity.CarroEntity;
 import com.saveCar.SaveCar.dto.carro.UpdateCarroDTO;
 import com.saveCar.SaveCar.dto.carro.ResponseCarroDTO;
@@ -39,7 +40,7 @@ public class CarroController {
     }
 
     @PostMapping
-    public ResponseEntity<CarroEntity> save(@RequestBody ResponseCarroDTO dto) {
+    public ResponseEntity<CarroEntity> save(@RequestBody CreateCarroDTO dto) {
         CarroEntity carro = service.salvarCarro(dto);
             return ResponseEntity.status(201).body(carro);
     }
