@@ -18,6 +18,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
@@ -30,6 +31,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final TokenProvider tokenProvider;
     private final UsuarioMapper usuarioMapper;
+
     @Value("${jwt.expiration}")
     private long expirationTime;
 
@@ -47,41 +49,35 @@ public class AuthenticationService {
         this.usuarioMapper = usuarioMapper;
     }
 
+    @Transactional
     public void register(RegisterRequestDTO dto) {
-        UsuarioEntity usuarioEncontrado = usuarioRepository.findByEmail(dto.getEmail()).orElse(null);
-
-        if (usuarioEncontrado != null) {
-            throw new BadRequestException(("Usuário ja cadastrado com este email!"));
+        if (usuarioRepository.findByEmail(dto.getEmail()).isPresent()) {
+            throw new BadRequestException("Usuário já cadastrado com este email!");
         }
 
         RolesEntity role = roleRepository.findByName(RoleType.OPERADOR.name())
                 .orElseGet(() -> roleRepository.save(RolesEntity.builder()
-                .name(RoleType.OPERADOR.name())
-                .build()));
+                        .name(RoleType.OPERADOR.name())
+                        .build()));
 
         UsuarioEntity usuario = usuarioMapper.toEntity(dto);
         usuario.setUserPassword(passwordEncoder.encode(dto.getPassword()));
 
+        // Salva sem roles e faz flush para o ID existir no banco
+        usuarioRepository.saveAndFlush(usuario);
+
+        // Agora o ID existe — associa as roles
         usuario.setRoles(Set.of(role));
-        usuarioRepository.save(usuario);
     }
 
     public TokenResponseDTO login(LoginRequestDTO dto) {
         try {
-            //É isso que precisa para fazer a autenticação
-            Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword()));
+            Authentication auth = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword()));
             String token = tokenProvider.gerarToken(auth);
-
             return new TokenResponseDTO(token, expirationTime);
-            //Fluxo do Spring por baixo dos panos
-            //authentication provider -> userDetailsService -> passwordEnconder.matches() -> autenticado
-
-            //caso não encontre o usuário (etapa 2) ou a senha criptografada != senha, devolve o catch
-        } catch(BadCredentialsException e) {
-            throw new BadRequestException(("Credencias inválidas"));
-        } catch (Exception e) {
-            throw e;
+        } catch (BadCredentialsException e) {
+            throw new BadRequestException("Credenciais inválidas");
         }
     }
-
 }

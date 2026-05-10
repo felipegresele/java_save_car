@@ -5,5 +5,5 @@ CREATE TABLE carro (
     marca VARCHAR(255) NOT NULL,
     modelo VARCHAR(255) NOT NULL,
     ano INT NOT NULL,
-    novo BOOLEAN DEFAULT false,
-)
+    novo BOOLEAN DEFAULT false
+);

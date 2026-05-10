@@ -1,9 +1,6 @@
 package com.saveCar.SaveCar.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 //@NoArgsConstructor
 //@AllArgsConstructor
 @Builder
+@Table(name = "role")
 public class RolesEntity implements GrantedAuthority {
 
     //O RolesEntity vai ser uma entidade do banco
