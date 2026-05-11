@@ -1,6 +1,7 @@
 package com.saveCar.SaveCar.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 
 @Entity
@@ -16,9 +17,13 @@ public class CarroEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     private String marca;
+    @NotBlank
     private String modelo;
+    @NotBlank
     private int ano;
+    @NotBlank
     private boolean novo;
 
     public CarroEntity() {

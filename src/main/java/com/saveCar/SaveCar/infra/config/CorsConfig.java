@@ -1,4 +1,4 @@
-package com.saveCar.SaveCar.infra.security;
+package com.saveCar.SaveCar.infra.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
