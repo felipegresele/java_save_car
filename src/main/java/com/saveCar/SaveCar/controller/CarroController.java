@@ -31,7 +31,7 @@ public class CarroController {
             security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponse(responseCode = "200", description = "Busca feito com sucesso!")
     @GetMapping
-    public ResponseEntity<Page<CarroEntity>> getAll(Pageable pageable) {
+    public ResponseEntity<Page<ResponseCarroDTO>> getAll(Pageable pageable) {
         //Qual a pagina = page
         //Qual o tamanho de cada pagina = size
         //Qual a ordem e pelo o que vai ordenar = order
@@ -49,8 +49,8 @@ public class CarroController {
             security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponse(responseCode = "200", description = "Busca feito com sucesso!")
     @GetMapping("/{id}")
-    public ResponseEntity<CarroEntity> buscarPorId(@PathVariable Long id){
-        CarroEntity carro = service.buscarPorId(id);
+    public ResponseEntity<ResponseCarroDTO> buscarPorId(@PathVariable Long id){
+        ResponseCarroDTO carro = service.buscarPorId(id);
         return ResponseEntity.ok().body(carro);
     }
 
@@ -60,8 +60,8 @@ public class CarroController {
             security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponse(responseCode = "201", description = "Carro salvo com sucesso!")
     @PostMapping
-    public ResponseEntity<CarroEntity> save(@RequestBody CreateCarroDTO dto) {
-        CarroEntity carro = service.salvarCarro(dto);
+    public ResponseEntity<ResponseCarroDTO> save(@RequestBody CreateCarroDTO dto) {
+        ResponseCarroDTO carro = service.salvarCarro(dto);
             return ResponseEntity.status(201).body(carro);
     }
 
@@ -71,9 +71,9 @@ public class CarroController {
             security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponse(responseCode = "201", description = "Carro atualizado com sucesso!")
     @PutMapping("/{id}")
-    public ResponseEntity<CarroEntity> update(@RequestBody UpdateCarroDTO dto,
+    public ResponseEntity<ResponseCarroDTO> update(@RequestBody UpdateCarroDTO dto,
                                               @PathVariable Long id) {
-        CarroEntity carroAtualizado = service.editarCarro(id, dto);
+        ResponseCarroDTO carroAtualizado = service.editarCarro(id, dto);
         return ResponseEntity.status(200).body(carroAtualizado);
     }
 

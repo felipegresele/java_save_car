@@ -12,15 +12,14 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI getOpenApi() {
 
-        Contact contact = new Contact();
-        contact.name("Felipe");
-        contact.email("felipehgresele@gmail.com");
+        //Contact contact = new Contact();
+        //contact.name("Felipe");
+        //contact.email("felipehgresele@gmail.com");
 
         Info info = new Info();
         info.title("SaveCar");
         info.version("v1");
         info.description("Aplicação para gerenciamento de veículos");
-        info.contact(contact);
 
         return new OpenAPI().info(info);
     };

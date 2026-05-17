@@ -5,6 +5,9 @@ CREATE TABLE role (
     name VARCHAR(255) NOT NULL
 );
 
+INSERT INTO role (id, name) VALUES (1, 'OPERADOR');
+INSERT INTO role (id, name) VALUES (2, 'ADMIN');
+
 CREATE TABLE usuario (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -20,5 +23,3 @@ CREATE TABLE usuarios_roles (
     CONSTRAINT fk_usuarios_roles_role FOREIGN KEY (role_id) REFERENCES role(id)
 );
 
-INSERT INTO role (id, name) VALUES (1, "OPERADOR");
-INSERT INTO role (id, name) VALUES (2, "ADMIN");

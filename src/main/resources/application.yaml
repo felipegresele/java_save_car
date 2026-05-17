@@ -15,8 +15,8 @@
           format_sql: true
 
     flyway:
-      #Desativo por agora  - não suporta a versao 18 do postgres
-      enabled: false
+      #Desativo por agora - sem suporta a versao 18 do postgres
+      enabled: true
       locations: classpath:db/migration
       baseline-on-migrate: true
       validate-on-migrate: true

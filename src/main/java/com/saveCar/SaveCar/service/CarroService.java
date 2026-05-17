@@ -1,9 +1,9 @@
 package com.saveCar.SaveCar.service;
 
 import com.saveCar.SaveCar.dto.carro.CreateCarroDTO;
+import com.saveCar.SaveCar.dto.carro.ResponseCarroDTO;
 import com.saveCar.SaveCar.entity.CarroEntity;
 import com.saveCar.SaveCar.mapper.CarroMapper;
-import com.saveCar.SaveCar.dto.carro.ResponseCarroDTO;
 import com.saveCar.SaveCar.dto.carro.UpdateCarroDTO;
 import com.saveCar.SaveCar.infra.exceptions.CarNotFoundException;
 import com.saveCar.SaveCar.infra.exceptions.InvalidCarDataException;
@@ -23,16 +23,17 @@ public class CarroService {
         this.carroMapper = carroMapper;
     }
 
-    public Page<CarroEntity> buscarTodos(Pageable pageable) {
-        return carroRepository.findAll(pageable);
+    public Page<ResponseCarroDTO> buscarTodos(Pageable pageable) {
+        return carroRepository.findAll(pageable).map(carroMapper::toDTO);
     }
 
-    public CarroEntity buscarPorId(Long id) {
-        return carroRepository.findById(id).orElseThrow(() -> new CarNotFoundException("ID: " + id + " não encontrado, carro não existe"));
+    public ResponseCarroDTO buscarPorId(Long id) {
+        CarroEntity carro = carroRepository.findById(id).orElseThrow(() -> new CarNotFoundException("ID: " + id + " não encontrado, carro não existe"));
+        return carroMapper.toDTO(carro);
     }
 
     //Passando CreateCarroDTO nos parametros pois a funcao precisa receber os novos dados para poder criar um novo Carro
-    public CarroEntity salvarCarro(CreateCarroDTO dto) {
+    public ResponseCarroDTO salvarCarro(CreateCarroDTO dto) {
         if (dto.marca() == null || dto.marca().isBlank()
                 || dto.modelo() == null || dto.modelo().isBlank()
                 || dto.ano() == null || dto.ano() <= 1960
@@ -43,11 +44,13 @@ public class CarroService {
 
         //Cria se os dados estiverem valídos
         CarroEntity carro = carroMapper.toCreate(dto);
-        return carroRepository.save(carro);
+        carroRepository.save(carro);
+        return carroMapper.toDTO(carro);
     }
 
-    public CarroEntity editarCarro(Long id, UpdateCarroDTO carroAtualizado) {
-        CarroEntity carro = carroRepository.findById(id)
+    public ResponseCarroDTO editarCarro(Long id, UpdateCarroDTO carroAtualizado) {
+
+        CarroEntity carroEncontrado = carroRepository.findById(id)
                 .orElseThrow(() -> new CarNotFoundException("ID: " + id + " não encontrado, carro não existe"));
 
         if (carroAtualizado.getModelo() == null || carroAtualizado.getModelo().isBlank()
@@ -59,9 +62,9 @@ public class CarroService {
         }
 
         //Só cria depois de validar todos os atributos
-        carroMapper.update(carroAtualizado);
-
-        return carroRepository.save(carro);
+        carroMapper.update(carroEncontrado, carroAtualizado);
+        carroRepository.save(carroEncontrado);
+        return carroMapper.toDTO(carroEncontrado);
     }
 
     public void excluirCarro(Long id) {

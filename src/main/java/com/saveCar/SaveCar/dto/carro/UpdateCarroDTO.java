@@ -11,16 +11,18 @@ public class UpdateCarroDTO {
     private String modelo;
     private Integer ano;
     private Boolean novo;
+    private Long usuarioID;
 
-    UpdateCarroDTO() {
+    public UpdateCarroDTO() {
 
     }
 
-    UpdateCarroDTO(String marca, String modelo, Integer ano, Boolean novo) {
+    public UpdateCarroDTO(String marca, String modelo, Integer ano, Boolean novo, Long usuarioID) {
         this.marca = marca;
         this.modelo = modelo;
         this.ano = ano;
         this.novo = novo;
+        this.usuarioID = usuarioID;
     }
 
 }

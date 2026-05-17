@@ -2,6 +2,7 @@ package com.saveCar.SaveCar.infra.security;
 
 import com.saveCar.SaveCar.infra.exceptions.InvalidTokenAcessExpection;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -50,7 +51,7 @@ public class TokenProvider {
         try {
             getClaims(token);
             return true;
-        }catch(InvalidTokenAcessExpection e) {
+        }catch(JwtException | IllegalArgumentException e) {
             return false;
         }
     }

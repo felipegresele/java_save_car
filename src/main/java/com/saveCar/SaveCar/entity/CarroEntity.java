@@ -2,6 +2,8 @@ package com.saveCar.SaveCar.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 @Entity
@@ -21,25 +23,34 @@ public class CarroEntity {
     private String marca;
     @NotBlank
     private String modelo;
-    @NotBlank
+    @NotNull
     private int ano;
-    @NotBlank
+
     private boolean novo;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id") //Chave Estrangeira
+    private UsuarioEntity usuario;
 
     public CarroEntity() {
 
     }
 
-    public CarroEntity(Long id, String marca, String modelo, int ano, boolean novo) {
+    public CarroEntity(Long id, String marca, String modelo, int ano, boolean novo, UsuarioEntity usuario) {
         this.id = id;
         this.marca = marca;
         this.modelo = modelo;
         this.ano = ano;
         this.novo = novo;
+        this.usuario = usuario;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getMarca() {
@@ -72,6 +83,14 @@ public class CarroEntity {
 
     public void setNovo(boolean novo) {
         this.novo = novo;
+    }
+
+    public UsuarioEntity getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(UsuarioEntity usuario) {
+        this.usuario = usuario;
     }
 
 }
